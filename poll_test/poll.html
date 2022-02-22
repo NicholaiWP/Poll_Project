@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLL API TEST</title>
+
+</head>
+<body>
+
+   <form>
+      <input type="text" id="pollName" name="pollName" required />
+      <input type="text" id="option1" name="option1" required />
+      <input type="text" id="option2" name="option2" required />
+      <input type="text" id="data" name="data" />
+      <input type="text" id="identifier" name="identifier" />
+   </form>
+ 
+
+    <button onclick="createPoll(document.getElementById('pollName').nodeValue, document.getElementById('option1').nodeValue, 
+    document.getElementById('option2').nodeValue), document.getElementById('data').nodeValue, document.getElementById('identifier').nodeValue">Create Poll</button>
+
+     <button onclick="getPoll('620e5823a15ed00010214849')">GetPoll</button>
+     <button onclick="getAllPolls()">GetAllPolls</button>
+</body>
+</html>
+
+<script>
+
+function getAllPolls(){
+var url = "https://api.pollsapi.com/v1/get/polls?offset=0&limit=100";
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url);
+
+xhr.setRequestHeader("content-type", "application/json");
+xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
+
+xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   }};
+
+xhr.send();
+}
+
+
+function getPoll(id){
+var url = "https://api.pollsapi.com/v1/get/poll/" + id;
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url);
+
+xhr.setRequestHeader("content-type", "application/json");
+xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
+
+xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   }};
+
+xhr.send();
+}
+
+function createPoll(question, option1, option2, dataElem, identifier){
+   
+     var text1 = {"text": option1};
+     var text2 = {"text": option2};
+      var options = [text1, text2];
+
+    if(identifier === undefined || identifier === null){
+       identifier = "None";
+    }
+
+      var data = null;
+
+    if(arguments.length == 4){
+          data = {
+         "data":{
+            "Custom": dataElem
+         },
+         "question": question,      
+         "options":options
+      };
+    }
+    else if(arguments.length == 3){
+          data = {          
+            "question": question,
+            "Identifier":identifier,
+            "options":options
+         };
+    }
+    else{
+         data = {
+         "data":{
+            "Custom": dataElem
+         },
+         "question": question,
+         "Identifier":identifier,
+         "options":options
+      };
+    }
+   
+
+var url = "https://api.pollsapi.com/v1/create/poll";
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST", url);
+
+xhr.setRequestHeader("content-type", "application/json");
+xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
+
+xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   }};
+
+var submitObjData = JSON.stringify(data);
+
+var dataToSend = `${submitObjData}`;
+
+xhr.send(dataToSend);
+}
+ 
+</script>
