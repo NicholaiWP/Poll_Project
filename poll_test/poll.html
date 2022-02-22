@@ -7,21 +7,47 @@
     <title>POLL API TEST</title>
 
 </head>
+
+<style>
+   .poll-section{
+      display: grid;
+      grid-template-columns: 1fr;
+      border: 1px solid gray;
+      max-width: fit-content;
+   }
+
+   .poll-section input{
+      max-width: 200px;
+      margin: 5px;
+   }
+
+   button{
+      margin: 10px;
+   }
+</style>
+
 <body>
 
-   <form>
-      <input type="text" id="pollName" name="pollName" required />
-      <input type="text" id="option1" name="option1" required />
-      <input type="text" id="option2" name="option2" required />
-      <input type="text" id="data" name="data" />
-      <input type="text" id="identifier" name="identifier" />
-   </form>
- 
+   <div class="Poll-section">    
+         <label for="question">Poll Question</label>
+         <input type="text" id="question" name="pollQuestion" required />
+         <label for="option1">Option 1</label>
+         <input type="text" id="option1" name="option1" required />
+         <label for="option2">Option 2</label>
+         <input type="text" id="option2" name="option2" required />
+   </div>
 
-    <button onclick="createPoll(document.getElementById('pollName').nodeValue, document.getElementById('option1').nodeValue, 
-    document.getElementById('option2').nodeValue), document.getElementById('data').nodeValue, document.getElementById('identifier').nodeValue">Create Poll</button>
 
-     <button onclick="getPoll('620e5823a15ed00010214849')">GetPoll</button>
+    
+    <button onclick="createPoll(document.getElementById('question').value, document.getElementById('option1').value, 
+    document.getElementById('option2').value)">Create Poll</button>
+   <hr>
+     <form>
+      <input type="text" id="poll-id"/>
+      <label for="poll-id">Get poll by id</label>
+      <input type="submit" onsubmit="getPoll(document.getElementById('poll-id').value)"></button>
+     </form>
+    <hr>
      <button onclick="getAllPolls()">GetAllPolls</button>
 </body>
 </html>
@@ -38,10 +64,14 @@ xhr.setRequestHeader("content-type", "application/json");
 xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
 
 xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
+   if (xhr.readyState === xhr.DONE) {
       console.log(xhr.status);
-      console.log(xhr.responseText);
+      if(xhr.status === 200){
+         console.log(JSON.parse(xhr.responseText)); 
+      }
    }};
+
+
 
 xhr.send();
 }
@@ -65,44 +95,35 @@ xhr.onreadystatechange = function () {
 xhr.send();
 }
 
-function createPoll(question, option1, option2, dataElem, identifier){
+function createPoll(question, option1, option2){
    
+/*
+{"status":"success","statusCode":200,
+"data":{"data":"null",
+"identifier":null,
+"question":"A or B",
+"created_at":"2022-02-22T10:23:55.030Z",
+"updated_at":"2022-02-22T10:23:55.030Z",
+"id":"6214b9bb08196a00102e0a48",
+"entity":"Poll",
+"options":[{"data":"null",
+"text":"A","votes_count":0,"poll_id":"6214b9bb08196a00102e0a48","created_at":"2022-02-22T10:23:55.035Z","updated_at":"2022-02-22T10:23:55.035Z","id":"6214b9bb08196a00102e0a49",
+"entity":"Option"},
+{"data":"null","text":"B","votes_count":0,"poll_id":"6214b9bb08196a00102e0a48","created_at":"2022-02-22T10:23:55.035Z","updated_at":"2022-02-22T10:23:55.035Z","id":"6214b9bb08196a00102e0a4a","entity":"Option"}]}}
+
+
+*/
+
+
      var text1 = {"text": option1};
      var text2 = {"text": option2};
       var options = [text1, text2];
-
-    if(identifier === undefined || identifier === null){
-       identifier = "None";
-    }
-
-      var data = null;
-
-    if(arguments.length == 4){
-          data = {
-         "data":{
-            "Custom": dataElem
-         },
-         "question": question,      
-         "options":options
-      };
-    }
-    else if(arguments.length == 3){
-          data = {          
-            "question": question,
-            "Identifier":identifier,
-            "options":options
-         };
-    }
-    else{
+   
          data = {
-         "data":{
-            "Custom": dataElem
-         },
-         "question": question,
-         "Identifier":identifier,
-         "options":options
+            "question":question,
+            "options":options
       };
-    }
+    
    
 
 var url = "https://api.pollsapi.com/v1/create/poll";
