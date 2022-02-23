@@ -38,6 +38,13 @@
 
 #create-poll{
    font-size: 1.5em;
+   background-color: transparent;
+   color: orange;
+   margin:10px;
+}
+
+#create-poll:hover{
+   cursor: pointer;
 }
 
 .center{
@@ -49,7 +56,13 @@
 </style>
 
 <body>
-   <form class="center">
+
+
+<button data-target="myModal" class="btn modal-trigger">Poll Creation</button>
+
+<div id="myModal" class="modal">
+   <div class="modal-content">  
+   <form class="">
    <div class="row">
       <div class="col s12 m12 l12">
         <div class="card light-blue lighten-5">
@@ -81,33 +94,41 @@
          
          <ul class="collapsible">
             <li>
-              <div class="collapsible-header light-blue lighten-5"><i class="material-icons">search</i>Poll search options</div>
+              <div class="collapsible-header light-blue lighten-5"><i class="material-icons">settings</i>Poll options</div>
                <div class="collapsible-body">
                      <span>
-                        <div class="row">
-                           <div class="col s12 m12 l12">
-                              <div class="input-field">                     
-                                 <label for="poll-id">Poll id</label>
-                                 <input type="text" id="poll-id" />
-                                 <input type="submit" id="create" value="Get Poll by Id" onsubmit="getPoll(document.getElementById('poll-id').value)"></button>
-                                 <button id="create" title="Get All Poll data" onclick="getAllPolls()">Get All Poll Data</button>      
-                               </div>   
-                           </div>
-                        </div>
+                        <!--Options here if any-->
                      </span>
                </div>
             </li>                
           </ul>
+
           <div class="row">
             <div class="col s12 m12 l12">
-               <button id="create" title="Create" onclick="createPoll(document.getElementById('question').value, document.getElementById('option1').value, 
-               document.getElementById('option2').value)"><span id="create-poll">Create Poll</span></button>                                             
+               <input type="submit" id="create-poll" title="Create" value="Create Poll" onsubmit="createPoll(document.getElementById('question').value, document.getElementById('option1').value, 
+               document.getElementById('option2').value)"></button>                                             
           </div>   
-      </div>
+         </div>
         </div>
       </div>
     </div>
    </form>
+  </div>
+  <div class="modal-footer">
+   <div class="row">
+      <div class="col s12 m12 l12">
+         <div class="input-field">                     
+            <label for="poll-id">Poll id</label>
+            <input type="text" id="poll-id" />
+            <button  id="create"  onclick="PrintPollToDOM(document.getElementById('poll-id').value)">Get poll by id</button>
+            <div id="search-result"></div>
+            <button id="create" title="Get All Poll data" onclick="PrintAllPolls()">Get All Poll Data</button>
+            <div id="search-result-all"></div>     
+          </div>   
+      </div>
+   </div>
+  </div>
+</div>
 </body>
 </html>
 
@@ -116,8 +137,89 @@
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems);
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
   });
+
+  function Stringify_WithSpaces(obj) {
+	let result = JSON.stringify(obj, null, 1); // stringify, with line-breaks and indents
+	result = result.replace(/^ +/gm, " "); // remove all but the first space for each line
+	result = result.replace(/\n/g, ""); // remove line-breaks
+	result = result.replace(/{ /g, "{").replace(/ }/g, "}"); // remove spaces between object-braces and first/last props
+	result = result.replace(/\[ /g, "[").replace(/ \]/g, "]"); // remove spaces between array-brackets and first/last items
+	return result;
+}
+
+function PrintAllPolls(){
+
+var searchElem = document.getElementById("search-result-all");
+var pTag = document.createElement('p');
+searchElem.appendChild(pTag);
+var url = "https://api.pollsapi.com/v1/get/polls?offset=0&limit=100";
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url);
+
+xhr.setRequestHeader("content-type", "application/json");
+xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
+
+xhr.onreadystatechange = function () {
+if (xhr.readyState === 4) {
+   let format = Stringify_WithSpaces(xhr.responseText);
+   const value = document.createTextNode(format);
+   pTag.appendChild(value);
+   console.log(xhr.status);
+   console.log(xhr.responseText);
+}};
+
+xhr.send();
+
+}
+
+
+function PrintPollToDOM(id){
+
+   var searchElem = document.getElementById("search-result");
+   var pTag = document.createElement('p');
+   searchElem.appendChild(pTag);
+   var url = "https://api.pollsapi.com/v1/get/poll/" + id;
+
+   var xhr = new XMLHttpRequest();
+   xhr.open("GET", url);
+
+   xhr.setRequestHeader("content-type", "application/json");
+   xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
+  
+   xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      let text = JSON.stringify(xhr.responseText);
+      const value = document.createTextNode(text);
+      pTag.appendChild(value);
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   }};
  
+   xhr.send();
+   
+}
+
+function getPollIdInfo(id){
+var url = "https://api.pollsapi.com/v1/get/poll/" + id;
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url);
+
+xhr.setRequestHeader("content-type", "application/json");
+xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
+
+xhr.onreadystatechange = function () {
+   if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      console.log(xhr.responseText);
+   }};
+
+//xhr.send();
+}
 
 function getAllPolls(){
 var url = "https://api.pollsapi.com/v1/get/polls?offset=0&limit=100";
