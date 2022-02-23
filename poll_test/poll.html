@@ -1,6 +1,5 @@
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <!-- Compiled and minified CSS -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
@@ -57,12 +56,11 @@
 
 <body>
 
-
 <button data-target="myModal" class="btn modal-trigger">Poll Creation</button>
 
 <div id="myModal" class="modal">
    <div class="modal-content">  
-   <form class="">
+   <form class="" onsubmit="createPoll();">
    <div class="row">
       <div class="col s12 m12 l12">
         <div class="card light-blue lighten-5">
@@ -91,22 +89,9 @@
                      </div> 
                   </div>                                   
          </div>
-         
-         <ul class="collapsible">
-            <li>
-              <div class="collapsible-header light-blue lighten-5"><i class="material-icons">settings</i>Poll options</div>
-               <div class="collapsible-body">
-                     <span>
-                        <!--Options here if any-->
-                     </span>
-               </div>
-            </li>                
-          </ul>
-
           <div class="row">
             <div class="col s12 m12 l12">
-               <input type="submit" id="create-poll" title="Create" value="Create Poll" onsubmit="createPoll(document.getElementById('question').value, document.getElementById('option1').value, 
-               document.getElementById('option2').value)"></button>                                             
+               <input type="submit" id="create-poll" value="Submit">                                                        
           </div>   
          </div>
         </div>
@@ -176,7 +161,6 @@ xhr.send();
 
 }
 
-
 function PrintPollToDOM(id){
 
    var searchElem = document.getElementById("search-result");
@@ -203,24 +187,6 @@ function PrintPollToDOM(id){
    
 }
 
-function getPollIdInfo(id){
-var url = "https://api.pollsapi.com/v1/get/poll/" + id;
-
-var xhr = new XMLHttpRequest();
-xhr.open("GET", url);
-
-xhr.setRequestHeader("content-type", "application/json");
-xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
-
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
-      console.log(xhr.status);
-      console.log(xhr.responseText);
-   }};
-
-//xhr.send();
-}
-
 function getAllPolls(){
 var url = "https://api.pollsapi.com/v1/get/polls?offset=0&limit=100";
 
@@ -238,61 +204,25 @@ xhr.onreadystatechange = function () {
       }
    }};
 
-
-
 xhr.send();
 }
 
-
-function getPoll(id){
-var url = "https://api.pollsapi.com/v1/get/poll/" + id;
-
-var xhr = new XMLHttpRequest();
-xhr.open("GET", url);
-
-xhr.setRequestHeader("content-type", "application/json");
-xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
-
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
-      console.log(xhr.status);
-      console.log(xhr.responseText);
-   }};
-
-xhr.send();
-}
-
-function createPoll(question, option1, option2){
+function createPoll(){
    
-/*
-{"status":"success","statusCode":200,
-"data":{"data":"null",
-"identifier":null,
-"question":"A or B",
-"created_at":"2022-02-22T10:23:55.030Z",
-"updated_at":"2022-02-22T10:23:55.030Z",
-"id":"6214b9bb08196a00102e0a48",
-"entity":"Poll",
-"options":[{"data":"null",
-"text":"A","votes_count":0,"poll_id":"6214b9bb08196a00102e0a48","created_at":"2022-02-22T10:23:55.035Z","updated_at":"2022-02-22T10:23:55.035Z","id":"6214b9bb08196a00102e0a49",
-"entity":"Option"},
-{"data":"null","text":"B","votes_count":0,"poll_id":"6214b9bb08196a00102e0a48","created_at":"2022-02-22T10:23:55.035Z","updated_at":"2022-02-22T10:23:55.035Z","id":"6214b9bb08196a00102e0a4a","entity":"Option"}]}}
+   var q = document.getElementById('question').value;
+   var o1 = document.getElementById('option1').value; 
+   var o2 = document.getElementById('option2').value;
 
-
-*/
-
-
-     var text1 = {"text": option1};
-     var text2 = {"text": option2};
+     var text1 = {"text": o1};
+     var text2 = {"text": o2};
       var options = [text1, text2];
    
          data = {
-            "question":question,
+            "question":q,
             "options":options
       };
     
    
-
 var url = "https://api.pollsapi.com/v1/create/poll";
 
 var xhr = new XMLHttpRequest();
