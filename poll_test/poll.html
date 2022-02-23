@@ -6,6 +6,8 @@
 
       <!-- Compiled and minified JavaScript -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,61 +31,93 @@
       cursor: pointer;
        
    }
+   .title-size{
+      font-size: 3em;
+      font-weight: 400;
+   }
+
+#create-poll{
+   font-size: 1.5em;
+}
+
+.center{
+   top:50%;
+   left:50%;
+   position: absolute;
+   transform : translate(-50%, -50%);
+}
 </style>
 
 <body>
-
+   <form class="center">
    <div class="row">
-      <div class="col s12 m6 l4">
+      <div class="col s12 m12 l12">
         <div class="card light-blue lighten-5">
-          <div class="card-content black-text">
-            <span class="card-title">Create Poll</span>
+          <div class="card-content black-tex center-align">
+               <span class="title-size">Create Poll</span>
          
-            <p>Fill out the information below to create a poll</p>
-
-               <div class="row">
-                  <div class="input-field col s12 m12 l12">    
-                     <label for="question">Poll Question</label>
-                     <input type="text" id="question" name="pollQuestion" required />
+                  <h4>Fill out the information below to create a poll</h4>
+            
+                  <div class="row">
+                     <div class="input-field col s12 m12 l12">    
+                        <label for="question">Poll Question</label>
+                        <input type="text" id="question" name="pollQuestion" required />
+                     </div>
                   </div>
+                  <div class="row">
+                     <div class="input-field col s12 m12 l12">
+                        <label for="option1">Option 1</label>
+                        <input type="text" id="option1" name="option1" required />
+                     </div>
+                  </div>
+                     
+                  <div class="row">
+                     <div class="input-field col s12 m12 l12">
+                        <label for="option2">Option 2</label>
+                        <input type="text" id="option2" name="option2" required />
+                     </div> 
+                  </div>                                   
+         </div>
+         
+         <ul class="collapsible">
+            <li>
+              <div class="collapsible-header light-blue lighten-5"><i class="material-icons">search</i>Poll search options</div>
+               <div class="collapsible-body">
+                     <span>
+                        <div class="row">
+                           <div class="col s12 m12 l12">
+                              <div class="input-field">                     
+                                 <label for="poll-id">Poll id</label>
+                                 <input type="text" id="poll-id" />
+                                 <input type="submit" id="create" value="Get Poll by Id" onsubmit="getPoll(document.getElementById('poll-id').value)"></button>
+                                 <button id="create" title="Get All Poll data" onclick="getAllPolls()">Get All Poll Data</button>      
+                               </div>   
+                           </div>
+                        </div>
+                     </span>
                </div>
-               <div class="row">
-                  <div class="input-field col s12 m12 l12">
-                     <label for="option1">Option 1</label>
-                     <input type="text" id="option1" name="option1" required />
-                  </div>
-               </div>
-                  
-               <div class="row">
-                  <div class="input-field col s12 m12 l12">
-                     <label for="option2">Option 2</label>
-                     <input type="text" id="option2" name="option2" required />
-                  </div> 
-               </div>                                   
-          </div>
-          <div class="card-action">                     
-               <div class="row">
-                  <div class="col s12 m12 l12">
-                     <div class="input-field">                     
-                        <label for="poll-id">Poll id</label>
-                        <input type="text" id="poll-id" />
-                        <input type="submit" id="create" value="Get Poll by Id" onsubmit="getPoll(document.getElementById('poll-id').value)"></button>        
-                      </div>   
-                  </div>
-                  <div class="col s12 m12 l12">
-                     <button id="create" title="Create" onclick="createPoll(document.getElementById('question').value, document.getElementById('option1').value, 
-                     document.getElementById('option2').value)">Create Poll</button> 
-                      <button id="create" title="Get All Poll data" onclick="getAllPolls()">Get All Poll Data</button>                   
-               </div>                                                               
-               </div>                    
-          </div>
+            </li>                
+          </ul>
+          <div class="row">
+            <div class="col s12 m12 l12">
+               <button id="create" title="Create" onclick="createPoll(document.getElementById('question').value, document.getElementById('option1').value, 
+               document.getElementById('option2').value)"><span id="create-poll">Create Poll</span></button>                                             
+          </div>   
+      </div>
         </div>
       </div>
     </div>
+   </form>
 </body>
 </html>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+ 
 
 function getAllPolls(){
 var url = "https://api.pollsapi.com/v1/get/polls?offset=0&limit=100";
