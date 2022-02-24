@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
       <!-- Compiled and minified CSS -->
@@ -55,51 +56,41 @@
 </style>
 
 <body>
-
-<button data-target="myModal" class="btn modal-trigger">Poll Creation</button>
-
-<div id="myModal" class="modal">
-   <div class="modal-content">  
-   <form class="" onsubmit="createPoll();">
-   <div class="row">
+   <div class="row center">
       <div class="col s12 m12 l12">
         <div class="card light-blue lighten-5">
           <div class="card-content black-tex center-align">
                <span class="title-size">Create Poll</span>
-         
-                  <h4>Fill out the information below to create a poll</h4>
-            
+                  
+               <h4>Fill out the information below to create a poll</h4>
+                                 
                   <div class="row">
                      <div class="input-field col s12 m12 l12">    
                         <label for="question">Poll Question</label>
-                        <input type="text" id="question" name="pollQuestion" required />
+                        <input type="text" id="question" name="pollQuestion"/>
                      </div>
                   </div>
                   <div class="row">
                      <div class="input-field col s12 m12 l12">
                         <label for="option1">Option 1</label>
-                        <input type="text" id="option1" name="option1" required />
+                        <input type="text" id="option1" name="option1"/>
                      </div>
                   </div>
                      
                   <div class="row">
                      <div class="input-field col s12 m12 l12">
                         <label for="option2">Option 2</label>
-                        <input type="text" id="option2" name="option2" required />
+                        <input type="text" id="option2" name="option2"/>
                      </div> 
-                  </div>                                   
-         </div>
-          <div class="row">
-            <div class="col s12 m12 l12">
-               <input type="submit" id="create-poll" value="Submit">                                                        
-          </div>   
-         </div>
+                  </div>   
+                  
+                  <button onclick="createPoll()" id="createBtn"  class="waves-effect waves-green btn-flat">Create</button>       
+         </div>    
         </div>
       </div>
     </div>
    </form>
   </div>
-  <div class="modal-footer">
    <div class="row">
       <div class="col s12 m12 l12">
          <div class="input-field">                     
@@ -112,8 +103,10 @@
           </div>   
       </div>
    </div>
-  </div>
 </div>
+
+
+
 </body>
 </html>
 
@@ -122,8 +115,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems);
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
+    var elems2 = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems2);
+
   });
 
   function Stringify_WithSpaces(obj) {
@@ -207,21 +201,30 @@ xhr.onreadystatechange = function () {
 xhr.send();
 }
 
-function createPoll(){
-   
-   var q = document.getElementById('question').value;
-   var o1 = document.getElementById('option1').value; 
-   var o2 = document.getElementById('option2').value;
 
-     var text1 = {"text": o1};
-     var text2 = {"text": o2};
-      var options = [text1, text2];
+//Needs work... :(
+function createPoll(){
+   //Get input from user
+   var question = document.getElementById('question').value;
+   var option1 = document.getElementById('option1').value; 
+   var option2 = document.getElementById('option2').value;
+
+   //create DOM elements
+    var dataDiv = document.createElement("div");
+    document.body.append(dataDiv);
+    var dataText = document.createElement("p");
+    dataDiv.appendChild(dataText);
+ 
+      //create poll object
+      var input1 = {"text": option1};
+      var input2 = {"text": option2};
+      var options = [input1, input2];
    
-         data = {
-            "question":q,
+       var data = {
+            "question":question,
             "options":options
       };
-    
+    console.log(data);
    
 var url = "https://api.pollsapi.com/v1/create/poll";
 
@@ -231,17 +234,28 @@ xhr.open("POST", url);
 xhr.setRequestHeader("content-type", "application/json");
 xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
 
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
-      console.log(xhr.status);
-      console.log(xhr.responseText);
+
+   xhr.onreadystatechange = function () {
+   if (xhr.readyState === xhr.DONE) {
+      if(xhr.status === 200){
+          console.log(xhr.status);
+          console.log(xhr.responseText);
+         var success = document.createTextNode(" You Successfully created a new poll! ");
+         dataText.appendChild(success);       
+      }
+      else{
+         return;
+      }
+      
    }};
 
-var submitObjData = JSON.stringify(data);
-
-var dataToSend = `${submitObjData}`;
-
-xhr.send(dataToSend);
+    //convert to json, so it can be sent using XMLHttpResponse
+    let text = JSON.stringify(data);
+            var dataToSend = `${text}`;
+            xhr.send(dataToSend);
+            dataText.innerHTML = text;
+   
 }
- 
+
+
 </script>
