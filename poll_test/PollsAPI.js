@@ -221,52 +221,75 @@ xhr.send();
 //vote id is string, but any currently
 //https://api.pollsapi.com/v1/remove/vote
 function removeVote(vote_id){
-    var url = "https://api.pollsapi.com/v1/remove/vote";
 
-var xhr = new XMLHttpRequest();
-xhr.open("POST", url);
+      if(vote_id !== null || vote_id !== undefined){
+      if(typeof(vote_id) === "string" || vote_id instanceof String){
+         var url = "https://api.pollsapi.com/v1/remove/vote";
 
-xhr.setRequestHeader("content-type", "application/json");
-xhr.setRequestHeader("api-key", API_KEY);
-
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4) {
-      console.log(xhr.status);
-      console.log(xhr.responseText);
-   }};
-
-var dataObj = 
-   {
-    "vote_id": vote_id
-   };
- 
-   var dataToSend = `${dataObj}`;
-    xhr.send(dataToSend);
+         var xhr = new XMLHttpRequest();
+         xhr.open("POST", url);
+         
+         xhr.setRequestHeader("content-type", "application/json");
+         xhr.setRequestHeader("api-key", API_KEY);
+         
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+               console.log(xhr.status);
+               console.log(xhr.responseText);
+            }};
+         
+         var dataObj = 
+            {
+               "vote_id": vote_id
+            };
+            
+            var dataToSend = `${dataObj}`;
+               xhr.send(dataToSend);
+         }
+         else{
+            return;
+         }
+      }
+      else{
+         return;
+      }
 
 }
 //https://api.pollsapi.com/v1/remove/poll
 function removePoll(poll_id){
-    var url = "https://api.pollsapi.com/v1/remove/poll";
-   
-   var xhr = new XMLHttpRequest();
-   xhr.open("POST", url);
-   
-   xhr.setRequestHeader("content-type", "application/json");
-   xhr.setRequestHeader("api-key", API_KEY);
-   
-   xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-         console.log(xhr.status);
-         console.log(xhr.responseText);
-      }};
-   
-      var dataObj = 
-      {
-          "poll_id": poll_id,
-      };
-    
-      var dataToSend = `${dataObj}`;
-       xhr.send(dataToSend);
-   
-   xhr.send(data);
+
+   if(poll_id !== null || poll_id !== undefined){
+      if(typeof(poll_id) === "string" || poll_id instanceof String){
+         var url = "https://api.pollsapi.com/v1/remove/poll";
+      
+         var xhr = new XMLHttpRequest();
+         xhr.open("POST", url);
+         
+         xhr.setRequestHeader("content-type", "application/json");
+         xhr.setRequestHeader("api-key", API_KEY);
+         
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+               console.log(xhr.status);
+               console.log(xhr.responseText);
+            }};
+         
+            var dataObj = 
+            {
+                "poll_id": poll_id,
+            };
+          
+            var dataToSend = `${dataObj}`;
+             xhr.send(dataToSend);
+         
+         xhr.send(data);
+      }
+      else{
+         return;
+      }
    }
+   else{
+      return;
+   }
+    
+}

@@ -6,6 +6,7 @@
 
       <!-- Compiled and minified JavaScript -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script src="./PollsAPI.js"></script>
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
     <meta charset="UTF-8">
@@ -112,6 +113,7 @@
 
 <script>
 
+
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems);
@@ -181,28 +183,8 @@ function PrintPollToDOM(id){
    
 }
 
-function getAllPolls(){
-var url = "https://api.pollsapi.com/v1/get/polls?offset=0&limit=100";
 
-var xhr = new XMLHttpRequest();
-xhr.open("GET", url);
-
-xhr.setRequestHeader("content-type", "application/json");
-xhr.setRequestHeader("api-key", "EA4PA8CS4QMJDKKDECEVQVD9AKBK");
-
-xhr.onreadystatechange = function () {
-   if (xhr.readyState === xhr.DONE) {
-      console.log(xhr.status);
-      if(xhr.status === 200){
-         console.log(JSON.parse(xhr.responseText)); 
-      }
-   }};
-
-xhr.send();
-}
-
-
-//Needs work... :(
+//POST
 function createPoll(){
    //Get input from user
    var question = document.getElementById('question').value;
