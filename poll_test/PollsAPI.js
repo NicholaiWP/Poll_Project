@@ -1,5 +1,5 @@
 
-const API_KEY = "EA4PA8CS4QMJDKKDECEVQVD9AKBK";
+const API_KEY = "";
 
 /*
 https://api.pollsapi.com/v1/create/poll
